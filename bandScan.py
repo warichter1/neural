@@ -17,7 +17,8 @@ Adapted from https://github.com/NeuroTechX/bci-workshop
 """
 
 import numpy as np  # Module that simplifies computations on matrices
-# import matplotlib.pyplot as plt  # Module used for plotting
+import matplotlib.pyplot as plt  # Module used for plotting
+from matplotlib.font_manager import FontProperties
 from pylsl import StreamInlet, resolve_byprop  # Module to receive EEG data
 import utils  # Our own utility functions
 
@@ -97,7 +98,12 @@ class GetWaves:
         # The try/except structure allows to quit the while loop by aborting the
         # script with <Ctrl-C>
         print('Press Ctrl-C in the console to break the while loop.')
-        
+        plt.ion()
+        figure, ax = plt.subplots(figsize=(8,6))
+        font = FontProperties(family='ubuntu',
+                              weight='bold',
+                              style='oblique', size=6.5)
+        x=0
         try:
             # The following loop acquires data, computes band powers, and calculates neurofeedback metrics based on those band powers
             while True:
@@ -124,8 +130,27 @@ class GetWaves:
                 self.band_buffer, _ = utils.update_buffer(self.band_buffer,
                                                      np.asarray([band_powers]))
                 self.output(band_powers, verbose)
+                handles = []
+                label, = ax.plot(x, band_powers[Band.Delta], label='Delta')
+                handles.append(label)
+                label, = ax.plot(x, band_powers[Band.Theta], label='Theta')
+                handles.append(label)
+                label, = ax.plot(x, band_powers[Band.Alpha], label='Alpha')
+                handles.append(label)
+                label, = ax.plot(x, band_powers[Band.Beta], label='Beta')
+                handles.append(label)
+                label, = ax.plot(x, band_powers[Band.Gamma], label='Gamma')
+                handles.append(label)
+                plt.title('Brain Waves')
+                plt.legend(handles=handles, prop=font)
+                figure.canvas.draw()
+                figure.canvas.flush_events()
+                figure.show() 
+                x += 1
                 if function is not None:
                     function(params)
+                    
+            plt.show(block=True)
         except KeyboardInterrupt:
             print('Closing!')
             
