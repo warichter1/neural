@@ -131,21 +131,26 @@ class GetWaves:
                                                      np.asarray([band_powers]))
                 self.output(band_powers, verbose)
                 handles = []
-                label, = ax.plot(x, band_powers[Band.Delta], label='Delta')
+                label, = ax.plot(x, band_powers[Band.Delta], label='Delta', 
+                                 color='red')
                 handles.append(label)
-                label, = ax.plot(x, band_powers[Band.Theta], label='Theta')
+                label, = ax.plot(x, band_powers[Band.Theta], label='Theta', 
+                                 color='orange')
                 handles.append(label)
-                label, = ax.plot(x, band_powers[Band.Alpha], label='Alpha')
+                label, = ax.plot(x, band_powers[Band.Alpha], label='Alpha', 
+                                 color='yellow')
                 handles.append(label)
-                label, = ax.plot(x, band_powers[Band.Beta], label='Beta')
+                label, = ax.plot(x, band_powers[Band.Beta], label='Beta', 
+                                 color='green')
                 handles.append(label)
-                label, = ax.plot(x, band_powers[Band.Gamma], label='Gamma')
+                label, = ax.plot(x, band_powers[Band.Gamma], label='Gamma', 
+                                 color='blue')
                 handles.append(label)
                 plt.title('Brain Waves')
                 plt.legend(handles=handles, prop=font)
                 figure.canvas.draw()
                 figure.canvas.flush_events()
-                figure.show() 
+                plt.show(block=False) 
                 x += 1
                 if function is not None:
                     function(params)
